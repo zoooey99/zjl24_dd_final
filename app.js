@@ -1,43 +1,38 @@
-
 const express = require('express');
 const handlebars = require('express-handlebars');
+const { sequelize } = require('./lib/models');  // Import sequelize from models
+const handler = require('./lib/handler');
+const session = require('express-session')
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 const app = express();
-const port = 3001
+const port = 3001;
 
-//set up handlebars stuff
+//start auth session
+app.use(session({
+  secret: 'supersecret',
+  resave: false,
+  saveUninitialized: false,
+  store: new SequelizeStore({ db: sequelize }),
+}));
+
+// Set up handlebars
 app.engine('handlebars', handlebars.engine());
 app.set('view engine', 'handlebars');
 app.set('views', './views');
 
-//import our models and init database
-const { User, Customer, Testimonial} = require('./lib/models')
-const {Sequelize, Model, DataTypes } = require('sequelize')
+// Routes
+app.get('/', handler.home);
+app.get('/db_test', handler.db_test);
 
-//create sequelize instance
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: 'database.sqlite'
-})
-
-
-
-app.get('/', (req, res) => {
-  res.render('home')
-})
-
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
-
-
-// Sync database
-sequelize.sync()
-  .then(() => {
-    console.log('Database synced successfully');
-    app.listen(3000);
-  })
-  .catch(err => {
-    console.error('Error syncing database:', err);
-  });
+// Sync database and start server
+sequelize.sync({ force: true })  
+    .then(() => {
+        console.log('Database synced successfully');
+        app.listen(port, () => {
+            console.log(`Example app listening at http://localhost:${port}`);
+        });
+    })
+    .catch(err => {
+        console.error('Error syncing database:', err);
+    });

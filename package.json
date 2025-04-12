@@ -1,8 +1,12 @@
 {
   "type": "commonjs",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "connect-session-sequelize": "^7.1.7",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "express-handlebars": "^8.0.1",
+    "express-session": "^1.18.1",
     "sequelize": "^6.37.7",
     "sqlite3": "^5.1.7"
   }

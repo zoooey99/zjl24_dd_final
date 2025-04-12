@@ -1,0 +1,51 @@
+<h1>Database Contents</h1>
+
+<h2>Users</h2>
+{{#if users.length}}
+    <ul>
+    {{#each users}}
+        <li>
+            <strong>User ID:</strong> {{user_id}}<br>
+            <strong>Email:</strong> {{email}}<br>
+            <strong>Stripe API Key:</strong> {{stripe_api_key}}
+        </li>
+    {{/each}}
+    </ul>
+{{else}}
+    <p>No users found</p>
+{{/if}}
+
+<h2>Customers</h2>
+{{#if customers.length}}
+    <ul>
+    {{#each customers}}
+        <li>
+            <strong>Customer ID:</strong> {{customer_id}}<br>
+            <strong>Name:</strong> {{name}}<br>
+            <strong>Email:</strong> {{email}}
+        </li>
+    {{/each}}
+    </ul>
+{{else}}
+    <p>No customers found</p>
+{{/if}}
+
+
+<h2>Testimonials</h2>
+{{#if testimonials.length}}
+    <ul>
+    {{#each testimonials}}
+        <li>
+            <strong>Testimonial ID:</strong> {{testimonial_id}}<br>
+            <strong>Content:</strong> {{testimonial}}<br>
+            <strong>Status:</strong> {{status}}<br>
+            <strong>Stars:</strong> {{stars}}
+            {{#if Customer}}
+                <br><strong>Customer:</strong> {{Customer.name}}
+            {{/if}}
+        </li>
+    {{/each}}
+    </ul>
+{{else}}
+    <p>No testimonials found</p>
+{{/if}}
