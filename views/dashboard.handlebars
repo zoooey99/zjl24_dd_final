@@ -1,0 +1,16 @@
+<h2>Welcome to the dashboard!</h2>
+<p>Your user ID is: {{userId}}</p>
+
+{{#unless stripe_api_key}}
+
+<form method="POST" action="/submitStripe">
+    <input type="hidden" name="userId" value="{{userId}}" />
+    <label for="stripe_api_key">Enter your Stripe API key:</label>
+    <input type="text" name="stripe_api_key" placeholder="paste key here..." required />
+    <button type="submit">submit</button>
+    <br/>
+</form>
+
+{{/unless}}
+
+<a href="/logout">Log out</a>
