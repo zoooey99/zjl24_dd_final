@@ -17,6 +17,10 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: new SequelizeStore({ db: sequelize }),
+    cookie: {
+      secure: process.env.NODE_ENV === 'production', // Only use secure cookies in production
+      maxAge: 1000 * 60 * 60 * 24 // 24 hours
+    }
   })
 );
 
@@ -39,11 +43,11 @@ app.post('/login', handler.postLogin);
 app.get('/logout', handler.getLogout)
 app.get('/dashboard', requireAuth, handler.getDashboard);
 
-app.post('/submitStripe', requireAuth, handler.postStripe);
- 
+app.post('/Stripe/addKey', requireAuth, handler.addStripeKey);
+app.post('/Stripe/pullData', requireAuth, handler.pullStripeData)
 
 // Sync database and start server
-sequelize.sync({ force: true })  
+sequelize.sync()  
     .then(() => {
         console.log('Database synced successfully');
         app.listen(port, () => {

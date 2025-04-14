@@ -1,0 +1,48 @@
+<h2>Stripe Customers</h2>
+
+{{#if customers.length}}
+    <table class="customer-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each customers}}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>{{this.email}}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <style>
+        .customer-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .customer-table th,
+        .customer-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .customer-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+
+        .customer-table tr:hover {
+            background-color: #f9f9f9;
+        }
+    </style>
+{{else}}
+    <p>No customers found.</p>
+{{/if}}
+
+<a href="/dashboard">Back to Dashboard</a>
