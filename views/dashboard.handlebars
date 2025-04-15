@@ -1,6 +1,9 @@
 <h2>Welcome to the dashboard!</h2>
 <p>Your user ID is: {{userId}}</p>
 <p>Your email is: {{email}}</p>
+<p>Your business name is: {{business_name}}</p>
+<p>Your Stripe API key is: {{stripe_api_key}}</p>
+{{>viewCustomers}}
 
 {{#unless stripe_api_key}}
 
