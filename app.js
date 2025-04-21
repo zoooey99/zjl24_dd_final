@@ -45,11 +45,11 @@ app.get('/dashboard', requireAuth, handler.getDashboard);
 
 // app.post('/Stripe/addKey', requireAuth, handler.addStripeKey);
 // app.get('/Stripe/viewCustomers', requireAuth, handler.showCustomers); 
-app.post('/Stripe/pullData', requireAuth, handler.pullStripeCustomers); //todo: add button to view customers
+//app.post('/Stripe/pullData', requireAuth, handler.pullStripeCustomers); //todo: add button to view customers
 // app.post('/Stripe/deleteCustomers', requireAuth, handler.deleteCustomers); 
 
 // Sync database and start server
-sequelize.sync({ alter: true }) //{ alter: true }
+sequelize.sync({ force: true }) //{ alter: true }
     .then(() => {
         console.log('Database synced successfully');
         app.listen(port, () => {
