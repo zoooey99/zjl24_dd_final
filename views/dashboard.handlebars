@@ -5,24 +5,4 @@
 <p>Your Stripe API key is: {{stripe_api_key}}</p>
 {{>viewCustomers}}
 
-{{#unless stripe_api_key}}
-
-<form method="POST" action="/Stripe/addKey">
-    <input type="hidden" name="userId" value="{{userId}}" />
-    <p>Instructions:</p>
-    <ol>
-        <li><a href="https://dashboard.stripe.com/apikeys/create?name=TestimonialWidgets&permissions%5B%5D=rak_charge_read&permissions%5B%5D=rak_bucket_connect_read" target="_blank">Generate a Stripe Restricted API key with the minimum required rights. Do not change any resource permissions.</a></li>
-        <li>Click [Create Key] at the bottom right of the Stripe page</li>
-        <li>Copy the new API key and paste it below</li>
-    </ol>
-    <label for="stripe_api_key">Enter your Stripe API key:</label>
-    <input type="text" name="stripe_api_key" placeholder="paste key here..." required />
-    <button type="submit">submit</button>
-    <br/>
-</form>
-
-{{/unless}}
-
-{{>getCustomers}}
-
 <a href="/logout">Log out</a>
