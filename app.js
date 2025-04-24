@@ -8,7 +8,7 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const requireAuth = require('./middleware/auth')
 
 const app = express();
-const port = 3001;
+const port = 3000;
 
 //start auth session
 app.use(
@@ -49,7 +49,7 @@ app.get('/dashboard', requireAuth, handler.getDashboard);
 // app.post('/Stripe/deleteCustomers', requireAuth, handler.deleteCustomers); 
 
 // Sync database and start server
-sequelize.sync({ force: true }) //{ alter: true }
+sequelize.sync({ force: true }) //{ alter: true }{ force: true }
     .then(() => {
         console.log('Database synced successfully');
         app.listen(port, () => {

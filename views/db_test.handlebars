@@ -5,9 +5,9 @@
     <ul>
     {{#each users}}
         <li>
-            <strong>User ID:</strong> {{user_id}}<br>
-            <strong>Email:</strong> {{email}}<br>
-            <strong>Stripe API Key:</strong> {{stripe_api_key}}
+            <strong>User ID:</strong> {{dataValues.user_id}}<br>
+            <strong>Email:</strong> {{dataValues.email}}<br>
+            <strong>Stripe API Key:</strong> {{dataValues.stripe_api_key}}
         </li>
     {{/each}}
     </ul>
@@ -20,9 +20,9 @@
     <ul>
     {{#each customers}}
         <li>
-            <strong>Customer ID:</strong> {{customer_id}}<br>
-            <strong>Name:</strong> {{name}}<br>
-            <strong>Email:</strong> {{email}}
+            <strong>Customer ID:</strong> {{dataValues.customer_id}}<br>
+            <strong>Name:</strong> {{dataValues.name}}<br>
+            <strong>Email:</strong> {{dataValues.email}}
         </li>
     {{/each}}
     </ul>
@@ -36,12 +36,12 @@
     <ul>
     {{#each testimonials}}
         <li>
-            <strong>Testimonial ID:</strong> {{testimonial_id}}<br>
-            <strong>Content:</strong> {{testimonial}}<br>
-            <strong>Status:</strong> {{status}}<br>
-            <strong>Stars:</strong> {{stars}}
+            <strong>Testimonial ID:</strong> {{dataValues.testimonial_id}}<br>
+            <strong>Content:</strong> {{dataValues.testimonial}}<br>
+            <strong>Status:</strong> {{dataValues.status}}<br>
+            <strong>Stars:</strong> {{dataValues.stars}}
             {{#if Customer}}
-                <br><strong>Customer:</strong> {{Customer.name}}
+                <br><strong>Customer:</strong> {{dataValues.Customer.dataValues.name}}
             {{/if}}
         </li>
     {{/each}}
