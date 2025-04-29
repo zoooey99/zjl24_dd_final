@@ -41,15 +41,18 @@ app.get('/signup', handler.getSignup);
 app.post('/signup', handler.postSignup);
 app.post('/login', handler.postLogin);
 app.get('/logout', handler.getLogout)
-app.get('/dashboard', requireAuth, handler.getDashboard);
+app.get('/dashboard/:id?', requireAuth, handler.getDashboard);
 
-// app.post('/Stripe/addKey', requireAuth, handler.addStripeKey);
-// app.get('/Stripe/viewCustomers', requireAuth, handler.showCustomers); 
-//app.post('/Stripe/pullData', requireAuth, handler.pullStripeCustomers); //todo: add button to view customers
-// app.post('/Stripe/deleteCustomers', requireAuth, handler.deleteCustomers); 
+app.get('/customers/delete/:id', handler.customersDelete)
+app.get('/customers/refresh', handler.customersRefresh)
+app.post('/customers/edit', handler.customersEdit)
+
+app.post('/testimonials/create/', handler.testimonialCreate)
+app.post('/testimonials/update', handler.testimonialEdit)
+app.get('/testimonials/delete/:id', handler.testimonialDelete)
 
 // Sync database and start server
-sequelize.sync({ force: true }) //{ alter: true }{ force: true }
+sequelize.sync({force:true}) //{ alter: true }{ force: true }
     .then(() => {
         console.log('Database synced successfully');
         app.listen(port, () => {

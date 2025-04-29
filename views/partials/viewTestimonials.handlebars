@@ -1,0 +1,225 @@
+<div class="card mb-4">
+    <div class="card-header bg-white">
+        <h3 class="card-title mb-0">Testimonials</h3>
+    </div>
+    <div class="card-body">
+        {{#if testimonials.length}}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Content</th>
+                            <th>Stars</th>
+                            <th>Status</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each testimonials}}
+                            <tr>
+                                <td>{{dataValues.Customer.dataValues.name}}</td>
+                                <td>{{dataValues.testimonial}}</td>
+                                <td class="star-display" data-stars="{{dataValues.stars}}">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">{{dataValues.status}}</span>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editTestimonialModal" 
+                                                data-testimonial-id="{{dataValues.testimonial_id}}"
+                                                data-testimonial-content="{{dataValues.testimonial}}"
+                                                data-testimonial-stars="{{dataValues.stars}}"
+                                                data-testimonial-status="{{dataValues.status}}">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <a href="/testimonials/delete/{{dataValues.testimonial_id}}" class="btn btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        {{else}}
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> No testimonials found.
+            </div>
+        {{/if}}
+    </div>
+</div>
+
+<!-- Edit Testimonial Modal -->
+<div class="modal fade" id="editTestimonialModal" tabindex="-1" aria-labelledby="editTestimonialModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editTestimonialModalLabel">Edit Testimonial</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editTestimonialForm">
+                    <input type="hidden" id="editTestimonialId" name="testimonial_id">
+                    <div class="mb-3">
+                        <label for="editTestimonialContent" class="form-label">Content</label>
+                        <textarea class="form-control" id="editTestimonialContent" name="testimonial" rows="4" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Stars</label>
+                        <div class="star-rating">
+                            <i class="bi bi-star-fill star-icon" data-rating="1"></i>
+                            <i class="bi bi-star-fill star-icon" data-rating="2"></i>
+                            <i class="bi bi-star-fill star-icon" data-rating="3"></i>
+                            <i class="bi bi-star-fill star-icon" data-rating="4"></i>
+                            <i class="bi bi-star-fill star-icon" data-rating="5"></i>
+                        </div>
+                        <input type="hidden" id="editTestimonialStars" name="stars" value="5">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTestimonialStatus" class="form-label">Status</label>
+                        <select class="form-select" id="editTestimonialStatus" name="status" required>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveTestimonialChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Update star displays on page load
+    document.querySelectorAll('.star-display').forEach(display => {
+        const stars = display.getAttribute('data-stars');
+        const icons = display.querySelectorAll('i');
+        icons.forEach((icon, index) => {
+            if (index < stars) {
+                icon.classList.add('text-warning');
+            } else {
+                icon.classList.remove('text-warning');
+                icon.classList.add('text-muted');
+            }
+        });
+    });
+
+    // When the modal is shown, populate it with the testimonial data
+    document.getElementById('editTestimonialModal').addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const testimonialId = button.getAttribute('data-testimonial-id');
+        const testimonialContent = button.getAttribute('data-testimonial-content');
+        const testimonialStars = button.getAttribute('data-testimonial-stars');
+        const testimonialStatus = button.getAttribute('data-testimonial-status');
+        
+        document.getElementById('editTestimonialId').value = testimonialId;
+        document.getElementById('editTestimonialContent').value = testimonialContent;
+        document.getElementById('editTestimonialStars').value = testimonialStars;
+        document.getElementById('editTestimonialStatus').value = testimonialStatus;
+        
+        // Update star icons
+        const stars = document.querySelectorAll('.star-icon');
+        stars.forEach((star, index) => {
+            if (index < testimonialStars) {
+                star.classList.add('text-warning');
+                star.classList.remove('text-muted');
+            } else {
+                star.classList.remove('text-warning');
+                star.classList.add('text-muted');
+            }
+        });
+    });
+
+    // Handle star rating selection
+    document.querySelectorAll('.star-icon').forEach(star => {
+        star.addEventListener('click', function() {
+            const rating = this.getAttribute('data-rating');
+            document.getElementById('editTestimonialStars').value = rating;
+            
+            // Update star icons
+            const stars = document.querySelectorAll('.star-icon');
+            stars.forEach((s, index) => {
+                if (index < rating) {
+                    s.classList.add('text-warning');
+                    s.classList.remove('text-muted');
+                } else {
+                    s.classList.remove('text-warning');
+                    s.classList.add('text-muted');
+                }
+            });
+        });
+    });
+
+    // Handle form submission
+    document.getElementById('saveTestimonialChanges').addEventListener('click', function() {
+        const form = document.getElementById('editTestimonialForm');
+        const formData = new FormData(form);
+        const data = {
+            testimonial_id: formData.get('testimonial_id'),
+            testimonial: formData.get('testimonial'),
+            stars: parseInt(formData.get('stars')),
+            status: formData.get('status')
+        };
+
+        console.log('Submitting testimonial data:', data);
+
+        fetch('/testimonials/update', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(async response => {
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Error updating testimonial');
+                }
+                return data;
+            } else {
+                throw new Error('Server returned an invalid response');
+            }
+        })
+        .then(data => {
+            console.log('Success:', data);
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating testimonial. Please check the console for details.');
+        });
+    });
+</script>
+
+<style>
+    .star-rating, .star-display {
+        font-size: 1.5rem;
+    }
+    
+    .star-rating {
+        cursor: pointer;
+    }
+    
+    .star-icon {
+        margin-right: 0.25rem;
+    }
+    
+    .star-icon:hover {
+        color: #ffc107 !important;
+    }
+</style>

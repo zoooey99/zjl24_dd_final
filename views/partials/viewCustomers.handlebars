@@ -1,46 +1,141 @@
-<h2>Stripe Customers</h2>
+<div class="card mb-4">
+    <div class="card-header bg-white">
+        <h3 class="card-title mb-0">Stripe Customers</h3>
+    </div>
+    <div class="card-body">
+        {{#if customers.length}}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each customers}}
+                            <tr>
+                                <td>{{dataValues.name}}</td>
+                                <td>{{dataValues.email}}</td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editCustomerModal" 
+                                                data-customer-id="{{dataValues.customer_id}}"
+                                                data-customer-name="{{dataValues.name}}"
+                                                data-customer-email="{{dataValues.email}}">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <a href="/customers/delete/{{dataValues.customer_id}}" class="btn btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                        <a href="/dashboard/{{dataValues.customer_id}}" class="btn btn-outline-success">
+                                            <i class="bi bi-plus-circle"></i> Testimonial
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        {{else}}
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> No customers found.
+            </div>
+        {{/if}}
+    </div>
+</div>
 
-{{#if customers.length}}
-    <table class="customer-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each customers}}
-                <tr>
-                    <td>{{dataValues.name}}</td>
-                    <td>{{dataValues.email}}</td>
-                </tr>
-            {{/each}}
-        </tbody>
-    </table>
+<!-- Edit Customer Modal -->
+<div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCustomerModalLabel">Edit Customer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editCustomerForm">
+                    <input type="hidden" id="editCustomerId" name="customer_id">
+                    <div class="mb-3">
+                        <label for="editCustomerName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="editCustomerName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editCustomerEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="editCustomerEmail" name="email" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveCustomerChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <style>
-        .customer-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+<script>
+    // When the modal is shown, populate it with the customer data
+    document.getElementById('editCustomerModal').addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const customerId = button.getAttribute('data-customer-id');
+        const customerName = button.getAttribute('data-customer-name');
+        const customerEmail = button.getAttribute('data-customer-email');
+        
+        document.getElementById('editCustomerId').value = customerId;
+        document.getElementById('editCustomerName').value = customerName;
+        document.getElementById('editCustomerEmail').value = customerEmail;
+    });
 
-        .customer-table th,
-        .customer-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+    // Handle form submission
+    document.getElementById('saveCustomerChanges').addEventListener('click', function() {
+        const form = document.getElementById('editCustomerForm');
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
 
-        .customer-table th {
-            background-color: #f5f5f5;
-            font-weight: bold;
-        }
+        fetch('/customers/edit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('Error updating customer');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating customer');
+        });
+    });
+</script>
 
-        .customer-table tr:hover {
-            background-color: #f9f9f9;
-        }
-    </style>
-{{else}}
-    <p>No customers found.</p>
-{{/if}}
+<style>
+    .customer-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .customer-table th,
+    .customer-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .customer-table th {
+        background-color: #f5f5f5;
+        font-weight: bold;
+    }
+
+    .customer-table tr:hover {
+        background-color: #f9f9f9;
+    }
+</style>

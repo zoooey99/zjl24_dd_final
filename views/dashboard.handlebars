@@ -1,8 +1,38 @@
-<h2>Welcome to the dashboard!</h2>
-<p>Your user ID is: {{user.dataValues.user_id}}</p>
-<p>Your email is: {{user.dataValues.email}}</p>
-<p>Your business name is: {{user.dataValues.business_name}}</p>
-<p>Your Stripe API key is: {{user.dataValues.stripe_api_key}}</p>
-{{>viewCustomers}}
+<div class="row mb-4">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Welcome to Your Dashboard</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="mb-1"><strong>Business Name:</strong> {{user.dataValues.business_name}}</p>
+                        <p class="mb-1"><strong>Email:</strong> {{user.dataValues.email}}</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <a href="/logout" class="btn btn-outline-danger">
+                            <i class="bi bi-box-arrow-right"></i> Log out
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<a href="/logout">Log out</a>
+<div class="row">
+    <div class="col">
+        {{>viewCustomers}}
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        {{>testimonialForm}}
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        {{>viewTestimonials}}
+    </div>
+</div>
